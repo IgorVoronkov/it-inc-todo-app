@@ -1,15 +1,11 @@
-import type { FilterValuesType } from "./App";
-
-type TaskType = {
-  id: number;
-  title: string;
-  isDone: boolean;
-};
+import { FullInput } from "./components";
+import type { TaskType, FilterValuesType } from "./types";
 
 type PropsType = {
   title: string;
   tasks: Array<TaskType>;
-  removeTask: (taskId: number) => void;
+  addTask: (title: string) => void;
+  removeTask: (taskId: TaskType["id"]) => void;
   changeFilter: (value: FilterValuesType) => void;
 };
 
@@ -17,10 +13,7 @@ export const Todolist = (props: PropsType) => {
   return (
     <div>
       <h3>{props.title}</h3>
-      <div>
-        <input />
-        <button>+</button>
-      </div>
+      <FullInput addTask={props.addTask} />
       <ul>
         {props.tasks.map((t) => (
           <li key={t.id}>
