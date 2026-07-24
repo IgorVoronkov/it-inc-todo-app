@@ -18,10 +18,12 @@ export const App = () => {
     setTasks((tasks) => [newTask, ...tasks]);
   };
 
-  function removeTask(id: TaskType["id"]) {
+  const removeTask = (id: TaskType["id"]) => {
     let filteredTasks = tasks.filter((t) => t.id != id);
     setTasks(filteredTasks);
-  }
+  };
+
+  const deleteAllTasks = () => setTasks([]);
 
   let [filter, setFilter] = useState<FilterValuesType>("all");
 
@@ -34,9 +36,9 @@ export const App = () => {
     tasksForTodolist = tasks.filter((t) => t.isDone === true);
   }
 
-  function changeFilter(value: FilterValuesType) {
+  const changeFilter = (value: FilterValuesType) => {
     setFilter(value);
-  }
+  };
 
   return (
     <div className="App">
@@ -45,6 +47,7 @@ export const App = () => {
         tasks={tasksForTodolist}
         addTask={addTask}
         removeTask={removeTask}
+        deleteAllTasks={deleteAllTasks}
         changeFilter={changeFilter}
       />
     </div>
