@@ -1,4 +1,5 @@
-import { FullInput } from "./components";
+import { useState, type ChangeEventHandler } from "react";
+import { Input, Button } from "./components";
 import type { TaskType, FilterValuesType } from "./types";
 
 type PropsType = {
@@ -10,10 +11,28 @@ type PropsType = {
 };
 
 export const Todolist = (props: PropsType) => {
+  const [newTaskTitle, setNewTaskTitle] = useState("");
+
+  const changeNewTaskTitle: ChangeEventHandler<
+    HTMLInputElement,
+    HTMLInputElement
+  > = (e) => {
+    setNewTaskTitle(e.currentTarget.value);
+  };
+
+  const addNewTask = () => {
+    props.addTask(newTaskTitle);
+    setNewTaskTitle("");
+  };
+
   return (
     <div>
       <h3>{props.title}</h3>
-      <FullInput addTask={props.addTask} />
+      {/* <FullInput addTask={props.addTask} /> */}
+      <div>
+        <Input value={newTaskTitle} onChange={changeNewTaskTitle} />
+        <Button onClick={addNewTask}>+</Button>
+      </div>
       <ul>
         {props.tasks.map((t) => (
           <li key={t.id}>
