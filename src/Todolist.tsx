@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ChangeEventHandler } from "react";
 import { Input, Button } from "./components";
 import { filterTasks } from "./utils";
 import type { TaskType, FilterValuesType } from "./types";
@@ -19,12 +19,29 @@ export const Todolist = ({
   deleteAllTasks,
 }: PropsType) => {
   const [newTaskTitle, setNewTaskTitle] = useState("");
+  const [validationMessage, setValidationMessage] = useState("");
   const [filter, setFilter] = useState<FilterValuesType>("all");
   const filteredTasks = filterTasks(tasks, filter);
+  const isTaskTitleValid = newTaskTitle.length > 0;
+
+  const changeNewTaskTitle: ChangeEventHandler<HTMLInputElement> = (e) => {
+    const MAX_LENGTH = 30;
+    const { value } = e.currentTarget;
+    if (value.length < MAX_LENGTH) {
+      setNewTaskTitle(value);
+    } else {
+      setValidationMessage(`Maximum ${MAX_LENGTH} letters`);
+    }
+  };
 
   const addNewTask = () => {
-    addTask(newTaskTitle);
-    setNewTaskTitle("");
+    if (!newTaskTitle) {
+      setValidationMessage("At least 1 letter");
+    } else {
+      addTask(newTaskTitle);
+      setNewTaskTitle("");
+      setValidationMessage("");
+    }
   };
 
   return (
@@ -34,10 +51,20 @@ export const Todolist = ({
       <div>
         <Input
           value={newTaskTitle}
-          onChange={(e) => setNewTaskTitle(e.currentTarget.value)}
+          onChange={changeNewTaskTitle}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              addNewTask();
+            }
+          }}
         />
-        <Button onClick={addNewTask}>+</Button>
+        <Button onClick={addNewTask} disabled={!isTaskTitleValid}>
+          +
+        </Button>
       </div>
+      {validationMessage && (
+        <small style={{ color: "red" }}>{validationMessage}</small>
+      )}
       <ul>
         {filteredTasks.map((t) => (
           <li key={t.id}>

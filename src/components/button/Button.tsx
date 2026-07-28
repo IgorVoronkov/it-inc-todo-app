@@ -1,10 +1,5 @@
-import type { MouseEventHandler } from "react";
+import type { ButtonHTMLAttributes } from "react";
 
-type ButtonProps = {
-  onClick?: MouseEventHandler<HTMLButtonElement>;
-  children?: string;
-};
-
-export const Button = ({ children, onClick }: ButtonProps) => {
-  return <button onClick={onClick}>{children}</button>;
+export const Button = (props: ButtonHTMLAttributes<HTMLButtonElement>) => {
+  return <button {...props} />;
 };

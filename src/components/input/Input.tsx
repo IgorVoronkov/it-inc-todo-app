@@ -1,10 +1,5 @@
-import type { ChangeEventHandler } from "react";
+import type { InputHTMLAttributes } from "react";
 
-type InputProps = {
-  value: string;
-  onChange: ChangeEventHandler<HTMLInputElement, HTMLInputElement>;
-};
-
-export const Input = ({ value, onChange }: InputProps) => {
-  return <input value={value} onChange={onChange} />;
+export const Input = (props: InputHTMLAttributes<HTMLInputElement>) => {
+  return <input {...props} />;
 };
