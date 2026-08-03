@@ -1,4 +1,4 @@
-import { useState, type ChangeEventHandler } from "react";
+import { useState, type ChangeEvent } from "react";
 import { Input, Button } from "./components";
 import { filterTasks } from "./utils";
 import type { TaskType, FilterValuesType } from "./types";
@@ -8,6 +8,10 @@ type PropsType = {
   tasks: Array<TaskType>;
   addTask: (title: string) => void;
   removeTask: (taskId: TaskType["id"]) => void;
+  changeTaskStatus: (
+    taskId: TaskType["id"],
+    isDone: TaskType["isDone"],
+  ) => void;
   deleteAllTasks: () => void;
 };
 
@@ -16,6 +20,7 @@ export const Todolist = ({
   tasks,
   addTask,
   removeTask,
+  changeTaskStatus,
   deleteAllTasks,
 }: PropsType) => {
   const [newTaskTitle, setNewTaskTitle] = useState("");
@@ -24,7 +29,7 @@ export const Todolist = ({
   const filteredTasks = filterTasks(tasks, filter);
   const isTaskTitleValid = newTaskTitle.length > 0;
 
-  const changeNewTaskTitle: ChangeEventHandler<HTMLInputElement> = (e) => {
+  const changeNewTaskTitle = (e: ChangeEvent<HTMLInputElement>) => {
     const MAX_LENGTH = 30;
     const { value } = e.currentTarget;
     if (value.length < MAX_LENGTH) {
@@ -47,7 +52,6 @@ export const Todolist = ({
   return (
     <div>
       <h3>{title}</h3>
-      {/* <FullInput addTask={addTask} /> */}
       <div>
         <Input
           value={newTaskTitle}
@@ -68,7 +72,11 @@ export const Todolist = ({
       <ul>
         {filteredTasks.map((t) => (
           <li key={t.id}>
-            <input type="checkbox" checked={t.isDone} />
+            <input
+              type="checkbox"
+              onChange={(e) => changeTaskStatus(t.id, e.currentTarget.checked)}
+              checked={t.isDone}
+            />
             <span>{t.title}</span>
             <Button onClick={() => removeTask(t.id)}>x</Button>
           </li>

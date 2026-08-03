@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ChangeEvent } from "react";
 import "./App.css";
 import { Todolist } from "./Todolist";
 import type { TaskType } from "./types";
@@ -23,6 +23,15 @@ export const App = () => {
     setTasks(filteredTasks);
   };
 
+  const changeTaskStatus = (
+    taskId: TaskType["id"],
+    isDone: TaskType["isDone"],
+  ) => {
+    setTasks((tasks) =>
+      tasks.map((task) => (task.id === taskId ? { ...task, isDone } : task)),
+    );
+  };
+
   const deleteAllTasks = () => setTasks([]);
 
   return (
@@ -32,6 +41,7 @@ export const App = () => {
         tasks={tasks}
         addTask={addTask}
         removeTask={removeTask}
+        changeTaskStatus={changeTaskStatus}
         deleteAllTasks={deleteAllTasks}
       />
     </div>
